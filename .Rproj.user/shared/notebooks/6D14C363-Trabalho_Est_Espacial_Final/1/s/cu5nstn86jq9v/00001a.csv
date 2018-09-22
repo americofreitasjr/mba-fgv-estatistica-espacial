@@ -1,0 +1,5 @@
+"0","##density.ppp - calcula a funcao de intensidade de acordo com o kernel escolhido"
+"0","#Argumentos:"
+"0","#x - objeto da classe ppp"
+"0","#sigma - é o valor do raio (tau na expressao dos slides)"
+"0","#kernel - o kernel que deseja-se usar"

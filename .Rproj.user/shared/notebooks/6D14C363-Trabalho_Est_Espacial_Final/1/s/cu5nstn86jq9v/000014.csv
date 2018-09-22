@@ -1,0 +1,7 @@
+"0","#------------------PRIMEIRA ORDEM-------------------------------------------------------------------"
+"0","#PLOTANDO GRAFICO EM  EFEITOS EM PRIMEIRA ORDEM"
+"0","Houston.g = density.ppp(x = Houston_ppp, sigma=0.01, kernel=""gaussian"")"
+"0","Houston.q = density.ppp(x = Houston_ppp, sigma=0.01, kernel=""quartic"")"
+"0","#Plotando os dados e as funcoes intensidades estimadas pelas diversas funcoes kernel"
+"0","par(mfrow=c(2,2))"
+"0","plot(density.ppp(Houston_ppp, sigma=0.01, kernel=""gaussian""), main=""Sigma=0.01"", cex.main=0.5)#gaussian"

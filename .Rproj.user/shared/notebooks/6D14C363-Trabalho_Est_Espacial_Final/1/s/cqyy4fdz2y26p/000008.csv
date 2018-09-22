@@ -1,0 +1,7 @@
+"0","#-----------Plotando as funcoes G, K e F de Houston-------------------------"
+"0","par(mfrow = c(2,2))"
+"0","par(mar=c(2.5,2.5,1.5,.5))"
+"0","HC.G = Gest(aHouston_ppp)"
+"0","HC.K = Kest(aHouston_ppp)"
+"0","HC.F = Fest(aHouston_ppp)"
+"0","plot(HC.G, main=""Funcao G de Houston"")"

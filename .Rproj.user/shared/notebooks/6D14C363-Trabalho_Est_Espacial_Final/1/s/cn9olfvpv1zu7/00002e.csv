@@ -1,0 +1,1 @@
+"0","plot(density.ppp(hrape_ppp  , sigma=0.02, kernel=""gaussian""), main=""Delito:Rape"", cex.main=0.5)#quartic"

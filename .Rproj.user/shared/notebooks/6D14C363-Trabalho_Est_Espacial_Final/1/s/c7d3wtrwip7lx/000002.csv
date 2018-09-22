@@ -1,0 +1,6 @@
+"0","Hburg.G=Gest(hburglary_ppp)"
+"0","Hburg.K=Kest(hburglary_ppp)"
+"0","Hburg.F=Fest(hburglary_ppp)"
+"0","par(mfrow = c(2,2))"
+"0","par(mar=c(2.5,2.5,1.5,.5))"
+"0","plot(Hburg.F, main=""Funcao F de Burglary"")"

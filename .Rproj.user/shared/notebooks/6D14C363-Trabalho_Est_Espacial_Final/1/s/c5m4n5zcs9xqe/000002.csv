@@ -1,0 +1,6 @@
+"0","Hrape.G= Gest(ahrape_ppp)"
+"0","Hrape.K=Kest(ahrape_ppp)"
+"0","Hrape.F=Fest(ahrape_ppp)"
+"0","par(mfrow = c(2,2))"
+"0","par(mar=c(2.5,2.5,1.5,.5))"
+"0","plot(Hrape.F, main=""Funcao F de Rape"")"
