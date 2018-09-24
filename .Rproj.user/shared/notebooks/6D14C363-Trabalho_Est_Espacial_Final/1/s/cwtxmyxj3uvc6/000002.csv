@@ -11,10 +11,6 @@
 "0","#install.packages(""ggplot2"")"
 "0","#install.packages(""ggmap"")"
 "0","library(maps)"
-"2","Warning message:
-"
-"2","package ‘sp’ was built under R version 3.5.1 
-"
 "0","library(mapdata)"
 "0","library(maptools)"
 "0","library(rgdal)"

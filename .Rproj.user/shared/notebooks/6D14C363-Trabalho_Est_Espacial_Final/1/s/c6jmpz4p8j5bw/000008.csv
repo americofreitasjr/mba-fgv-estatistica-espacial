@@ -1,3 +1,0 @@
-"0","#class(houston)"
-"0","houston_limit<-read.csv2(""Base Houston.csv"", sep = "","", dec = ""."" )"
-"0","houston_limit"

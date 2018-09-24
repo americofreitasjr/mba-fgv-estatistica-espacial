@@ -1,6 +1,0 @@
-"0","Hrob.G=Gest(ahrobbery_ppp)"
-"0","Hrob.K=Kest(ahrobbery_ppp)"
-"0","Hrob.F=Fest(ahrobbery_ppp)"
-"0","par(mfrow = c(2,2))"
-"0","par(mar=c(2.5,2.5,1.5,.5))"
-"0","plot(Hrob.F, main=""Funcao F de Robbery"")"

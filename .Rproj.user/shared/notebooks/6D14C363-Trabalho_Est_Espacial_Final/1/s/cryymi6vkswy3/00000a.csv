@@ -1,7 +1,0 @@
-"0","#-------------Plotando as funcoes G, K e F dos delitos----------------------"
-"0","KHagg.G=Gest(ahagg_ppp)"
-"0","KHagg.K=Kest(ahagg_ppp)"
-"0","KHagg.F=Fest(ahagg_ppp)"
-"0","par(mfrow = c(2,2))"
-"0","par(mar=c(2.5,2.5,1.5,.5))"
-"0","plot(KHagg.G, main=""Funcao G de Aggravated assault"")"

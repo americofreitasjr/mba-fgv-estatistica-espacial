@@ -1,1 +1,0 @@
-"0","plot(density.ppp(Houston_ppp, sigma=0.03, kernel=""quartic""), main=""Sigma=0.03"", cex.main=0.5)#quartic"

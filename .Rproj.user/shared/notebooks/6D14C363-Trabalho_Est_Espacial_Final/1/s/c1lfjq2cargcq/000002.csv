@@ -1,6 +1,0 @@
-"0","Hmurd.G=Gest(ahmurder_ppp)"
-"0","Hmurd.K=Kest(ahmurder_ppp)"
-"0","Hmurd.F=Fest(ahmurder_ppp)"
-"0","par(mfrow = c(2,2))"
-"0","par(mar=c(2.5,2.5,1.5,.5))"
-"0","plot(Hmurd.F, main=""Funcao F de Murder"")"

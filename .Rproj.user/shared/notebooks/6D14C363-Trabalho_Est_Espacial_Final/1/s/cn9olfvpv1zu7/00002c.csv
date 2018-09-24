@@ -1,1 +1,0 @@
-"0","plot(density.ppp(hauto_ppp , sigma=0.02, kernel=""gaussian""), main=""Delito:Auto thief"", cex.main=0.5)#quartic"

@@ -1,3 +1,1 @@
-"0","#----------------PLOTANDO GRAFICO EM  EFEITOS EM PRIMEIRA ORDEM POR DELITO"
-"0","par(mfrow=c(3,2))"
-"0","plot(density.ppp(hagg_ppp , sigma=0.02, kernel=""gaussian""), main=""Delito:Aggravated assault"", cex.main=0.5)#quartic"
+"0","par(mar=c(0.5,0.5,1.5,0.5))"

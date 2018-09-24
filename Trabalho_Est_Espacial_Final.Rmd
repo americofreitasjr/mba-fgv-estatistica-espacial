@@ -6,14 +6,24 @@ output:
 
 # Estatística Espacial
 
-## Trabalho 2
+#### Grupo
+- Americo Freitas
+- André Martins
+- Antonio Junior
+
+#### Professor
+- Jony Arrais Pinto Junior
+
+#### Descrição
+
+- Trabalho 2
 
 Dados – Localizações das ocorrências de crimes na cidade de Houston.
 
 Análise – Faça uma análise descritiva/exploratória (apresentação do espaço, do fenômeno de interesse, além de investigar os efeitos de 1a e 2a ordem) das localizações das ocorrências dos crimes de acordo com seus tipos (variável offense). Ao realizar a análise discutam a estimação da função de intensidade e diferentes formas de verificar a existência do efeito de segunda ordem. Discutam as possíveis diferenças observadas entre os efeitos estimados (1a e 2a ordem) dos 7 cenários avaliados.
 
 
-## Carregando as bibliotecas necessárias para a análise do modelo
+### Carregando as bibliotecas necessárias para a análise do modelo
 
 ```{r echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 
@@ -47,15 +57,16 @@ library(ggmap)
 
 
 
-## Lendo o shapefile com os bairros de Houston no formato UTM e transformando para o formato Lat, Long
+### Lendo o shapefile com os bairros de Houston no formato Lat e Long
 ```{r}
 
 houston_shp = readOGR("Houston_City_Limit/Houston_City_Limit.shp")
-houston=spTransform(houston_shp, CRS("+proj=longlat +datum=WGS84"))
+houston=houston_shp
+#houston=spTransform(houston_shp, CRS("+proj=longlat +datum=WGS84"))
 
 ```
 
-## Carregando a Base Houston (Ocorrencias), e as bases auxiliares separadas por delito.
+### Carregando a Base Houston (Ocorrencias), e as bases auxiliares separadas por delito.
 Bases Auxilares:
 
 - Robbery, Aggravated Assault, Auto Theft, Burglary, Rape, Murder, Hours
@@ -83,7 +94,7 @@ write.csv2(houston_limit, "hous.csv")
 
 ```
 
-## Análise do mapa
+### Análise do mapa
 
 ```{r}
 
@@ -107,7 +118,9 @@ hburglary_ppp = ppp(hburglary$lon, hburglary$lat,window=HCL )
 
 ```
 
-## Ocorrências em Houston
+### Ocorrências de crimes em Houston
+
+Ao observar o mapa, concluímos que existem áreas com maior concentração de ocorrências, sugerindo que os eventos ocorram mais ao centro.
 
 ```{r}
 
@@ -125,7 +138,11 @@ plot(Houston_ppp, pch=21, cex=0.9, bg="blue", main="Ocorrencias de crimes em Hou
 
 ```
 
-## Efeitos de primeira Ordem
+### Efeitos de primeira Ordem
+
+#### Análise geral
+
+Ao aplicar o raio dos estimadores com pesos distintos reparamos que para o maior raio (0,03) utilizando o kernel Quártico, temos uma maior suavidade visual nas áreas com menos ocorrências próximas as áreas de maior ocorrência, o que intensifica o alerta visual fornecido pelo mapa. Para o raio menor (0,01) no kernel Normal (gaussiano), conseguimos identificar bem as areas com buracos de ocorrência dos eventos. Para alertar uma situação de perigo, eu avalio o de maior raio (0,03) Quártico como mais adequado.
 
 ```{r}                                   
 
@@ -147,7 +164,9 @@ plot(density.ppp(Houston_ppp, sigma=0.03, kernel="gaussian"), main="Sigma=0.03",
 
 ```
 
-### Análise por delito
+#### Análise por delito
+
+Ao analisar cada delito separadamente, identificamos que as regiões de predominancia de ocorrências são razoavelmente comuns idependente do delito.
 
 ```{r}
 
@@ -160,11 +179,13 @@ plot(density.ppp(hmurder_ppp , sigma=0.02, kernel="gaussian"), main="Delito:Murd
 plot(density.ppp(hauto_ppp , sigma=0.02, kernel="gaussian"), main="Delito:Auto thief", cex.main=0.5)#quartic
 plot(density.ppp(hrape_ppp  , sigma=0.02, kernel="gaussian"), main="Delito:Rape", cex.main=0.5)#quartic
 plot(density.ppp(hburglary_ppp , sigma=0.02, kernel="gaussian"), main="Delito:burglary", cex.main=0.5)#quartic
-
+par(mar=c(0.5,0.5,1.5,0.5))
 
 ```
 
 ### Análise por crimes
+
+Ao analisar os pontos por validação cruzada, para suavisação do kernel, a largura de banda estimada é de aproximadamente 0.0029.
 
 ```{r}
 
@@ -186,31 +207,33 @@ plot(raio.est)
 ```
 
 
-## Efeitos de segunda Ordem
+### Efeitos de segunda Ordem
 
-### Estudando o efeito de segunda ordem através de uma amostra selecionada para reduzir o custo computacional
+Estudando o efeito de segunda ordem através de uma amostra de 50 ocorrências de cada delito, selecionadas aleatóriamente para reduzir o custo computacional.
 
 ```{r}      
 
 #-------------------------------------SEGUNDA ORDEM----------------------------------
 #Sorteando uma amostra de tamanho 100 para estudar o efeito de segunda ordem por conta do custo computacional
+len=50
+aHouston = sample_n(houston_limit,len)
+ahagg = sample_n(hagg ,len)
+ahrobbery = sample_n(hrobbery,len)
+ahmurder = sample_n(hmurder,len)
+ahauto= sample_n(hauto,len)
+ahrape= sample_n(hrape,len)
+ahburglary= sample_n(hburglary,len) 
 
-#aHouston = sample_n(houston_limit,100)
-#ahagg = sample_n(hagg ,100)
-#ahrobbery = sample_n(hrobbery,100)
-#ahmurder = sample_n(hmurder,100)
-#ahauto= sample_n(hauto,100)
-#ahrape= sample_n(hrape,100)
-#ahburglary= sample_n(hburglary,100) 
+aHouston_ppp<-ppp(aHouston$lon, aHouston$lat, window=HCL)
+ahagg_ppp<-ppp(ahagg$lon, ahagg$lat, window=HCL)
+ahrobbery_ppp<-ppp(ahrobbery$lon,ahrobbery$lat, window=HCL)
+ahmurder_ppp<-ppp(ahmurder$lon, ahmurder$lat, window=HCL)
+ahauto_ppp <-ppp(ahauto$lon, ahauto$lat, window=HCL)
+ahrape_ppp <-ppp(ahrape$lon, ahrape$lat, window=HCL)
+ahburglary_ppp <-ppp(ahburglary$lon,ahburglary$lat, window=HCL)
 
-#aHouston_ppp<-ppp(aHouston$lon, aHouston$lat, window=HCL)
-#ahagg_ppp<-ppp(ahagg$lon, ahagg$lat, window=HCL)
-#ahrobbery_ppp<-ppp(ahrobbery$lon,ahrobbery$lat, window=HCL)
-#ahmurder_ppp<-ppp(ahmurder$lon, ahmurder$lat, window=HCL)
-#ahauto_ppp <-ppp(ahauto$lon, ahauto$lat, window=HCL)
-#ahrape_ppp <-ppp(ahrape$lon, ahrape$lat, window=HCL)
-#ahburglary_ppp <-ppp(ahburglary$lon,ahburglary$lat, window=HCL)
-
+par(mfrow = c(4,2))
+par(mar=c(0.5,0.5,1.5,0.5))
 plot(ahagg_ppp, pch=21, cex=0.9, bg="blue", main="Aggravated assault")
 plot(ahrobbery_ppp, pch=21, cex=0.9, bg="blue", main="Robbery")
 plot(ahmurder_ppp, pch=21, cex=0.9, bg="blue", main="Murder")
@@ -219,17 +242,21 @@ plot(ahrape_ppp, pch=21, cex=0.9, bg="blue", main="Rape")
 plot(ahburglary_ppp, pch=21, cex=0.9, bg="blue", main="Burglary")
 
 
+
 ```
 
+### Observando interação entre os eventos
+
+Ao observar a interação entre os eventos, aplicamos para todos os tipos de delitos as funções G, K e F. Em todos os casos, observamos que no resultado das funções G e K, as linhas estão a cima da curva teórica. E para o resultado da função F as linhas estão abaixo da curva teórica. Em todas as tres funções,  confirmamos nossa percepção de que a interação entre os eventos é de agrupamento.
 
 ```{r}
 #-----------Plotando as funcoes G, K e F de Houston-------------------------
 par(mfrow = c(2,2))
 par(mar=c(2.5,2.5,1.5,.5))
 
-#HC.G = Gest(aHouston_ppp)
-#HC.K = Kest(aHouston_ppp)
-#HC.F = Fest(aHouston_ppp)
+HC.G = Gest(aHouston_ppp)
+HC.K = Kest(aHouston_ppp)
+HC.F = Fest(aHouston_ppp)
 
 plot(HC.G, main="Funcao G de Houston")
 plot(HC.K, main="Funcao K de Houston")
@@ -241,99 +268,105 @@ plot(HC.F, main="Funcao F de Houston")
 ```{r}
 #-------------Plotando as funcoes G, K e F dos delitos----------------------
 
-#KHagg.G=Gest(ahagg_ppp)
-#KHagg.K=Kest(ahagg_ppp)
-#KHagg.F=Fest(ahagg_ppp)
+KHagg.G=Gest(ahagg_ppp)
+KHagg.K=Kest(ahagg_ppp)
+KHagg.F=Fest(ahagg_ppp)
 
 par(mfrow = c(2,2))
 par(mar=c(2.5,2.5,1.5,.5))
 plot(KHagg.G, main="Funcao G de Aggravated assault")
-plot(KHagg.F, main="Funcao F de Aggravated assault")
 plot(KHagg.K, main="Funcao K de Aggravated assault")
+plot(KHagg.F, main="Funcao F de Aggravated assault")
 
 ```
 
 
 ```{r}
 
-#Hrob.G=Gest(ahrobbery_ppp)
-#Hrob.K=Kest(ahrobbery_ppp)
-#Hrob.F=Fest(ahrobbery_ppp)
+Hrob.G=Gest(ahrobbery_ppp)
+Hrob.K=Kest(ahrobbery_ppp)
+Hrob.F=Fest(ahrobbery_ppp)
 
 
 par(mfrow = c(2,2))
 par(mar=c(2.5,2.5,1.5,.5))
-plot(Hrob.F, main="Funcao F de Robbery")
 plot(Hrob.G, main="Funcao G de Robbery")
 plot(Hrob.K, main="Funcao k de Robbery")
+plot(Hrob.F, main="Funcao F de Robbery")
 
 ```
 
 
 ```{r}
 
-#Hmurd.G=Gest(ahmurder_ppp)
-#Hmurd.K=Kest(ahmurder_ppp)
-#Hmurd.F=Fest(ahmurder_ppp)
+Hmurd.G=Gest(ahmurder_ppp)
+Hmurd.K=Kest(ahmurder_ppp)
+Hmurd.F=Fest(ahmurder_ppp)
 
 
 par(mfrow = c(2,2))
 par(mar=c(2.5,2.5,1.5,.5))
-plot(Hmurd.F, main="Funcao F de Murder")
+
 plot(Hmurd.G, main="Funcao G de Murder")
 plot(Hmurd.K, main="Funcao K de Murder")
+plot(Hmurd.F, main="Funcao F de Murder")
 
 ```
 
 
 ```{r}
 
-#Haut.G =Gest(ahauto_ppp)
-#Haut.K =Kest(ahauto_ppp)
-#Haut.F =Fest(ahauto_ppp)
+Haut.G =Gest(ahauto_ppp)
+Haut.K =Kest(ahauto_ppp)
+Haut.F =Fest(ahauto_ppp)
 
 
 par(mfrow = c(2,2))
 par(mar=c(2.5,2.5,1.5,.5))
-plot(Haut.F, main="Funcao F de Auto thief")
-plot(Haut.K, main="Funcao K de Auto thief")
+
 plot(Haut.G, main="Funcao G de Auto thief")
+plot(Haut.K, main="Funcao K de Auto thief")
+plot(Haut.F, main="Funcao F de Auto thief")
+
 
 ```
 
 
 ```{r}
 
-#Hrape.G= Gest(ahrape_ppp)
-#Hrape.K=Kest(ahrape_ppp)
-#Hrape.F=Fest(ahrape_ppp)
+Hrape.G= Gest(ahrape_ppp)
+Hrape.K=Kest(ahrape_ppp)
+Hrape.F=Fest(ahrape_ppp)
 
 
 par(mfrow = c(2,2))
 par(mar=c(2.5,2.5,1.5,.5))
-plot(Hrape.F, main="Funcao F de Rape")
+
 plot(Hrape.G, main="Funcao G de Rape")
 plot(Hrape.K, main="Funcao K de Rape")
+plot(Hrape.F, main="Funcao F de Rape")
 
 ```
 
 
 ```{r}
 
-#Hburg.G=Gest(hburglary_ppp)
-#Hburg.K=Kest(hburglary_ppp)
-#Hburg.F=Fest(hburglary_ppp)
+Hburg.G=Gest(hburglary_ppp)
+Hburg.K=Kest(hburglary_ppp)
+Hburg.F=Fest(hburglary_ppp)
 
 
 par(mfrow = c(2,2))
 par(mar=c(2.5,2.5,1.5,.5))
-plot(Hburg.F, main="Funcao F de Burglary")
 plot(Hburg.G, main="Funcao G de Burglary")
 plot(Hburg.K, main="Funcao K de Burglary")
+plot(Hburg.F, main="Funcao F de Burglary")
 
 ```
 
 ## Testes
+
+Ao avaliar os testes, Elark-Evans e Hopkins-Skellam podemos descartar hipotese de CSR, ou seja, podemos descartar hipotese de completa aleatoriedade espacial.
 
 ### Realizando o teste de Clark-Evans para verificar agregacao espacial
 
@@ -367,13 +400,22 @@ hopskel.test(hburglary_ppp , alternative="clustered")
 ```
 
 
+- Kiso -Estimativa de correção isotrópica de K
+- Ktrans-estimativa corrigida para tradução de K
+- Kbord-estimativa corrigida para as fronteiras de K
+- Kpois- Posição teórica de K
+
+Para essa análise usaremos o método de vizinho mais próximo, onde estimamos a função de distribuição cumulativa baseado nas distâncias entre eventos em uma região de análise. Usaremos a hipótese de CSR para estimar a aleatoriedade espacial. As funções observada estão dentro do envelope, o que indica que os
+dados explorados seguem o CSR em todas as distâncias.
+
+
 ```{r}
 #Funcoes para estimar os envelopes das funcoes F, G e K
 #Kest=envelope(aNYppp,Kest,nsim=10) #alto custo computacional
 
 par(mfrow=c(2,2))
-#aHouston_ppp.Gest=envelope(aHouston_ppp,fun = Gest, nsim=20)
-#aHouston_ppp.Fest=envelope(aHouston_ppp,fun = Fest, nsim=10)
+aHouston_ppp.Gest=envelope(aHouston_ppp,fun = Gest, nsim=20)
+aHouston_ppp.Fest=envelope(aHouston_ppp,fun = Fest, nsim=10)
 plot(aHouston_ppp, pch=21, cex=0.9, bg="blue")
 plot(aHouston_ppp.Gest)
 plot(aHouston_ppp.Fest)
@@ -386,8 +428,8 @@ plot(aHouston_ppp.Fest)
 #Kest=envelope(aNYppp,Kest,nsim=10) #alto custo computacional
 
 par(mfrow=c(2,2))
-#ahagg_ppp.Gest=envelope(ahagg_ppp,fun = Gest,nsim=20)
-#ahagg_ppp.Fest=envelope(ahagg_ppp,fun = Fest, nsim=10)
+ahagg_ppp.Gest=envelope(ahagg_ppp,fun = Gest,nsim=20)
+ahagg_ppp.Fest=envelope(ahagg_ppp,fun = Fest, nsim=10)
 plot(ahagg_ppp, pch=21, cex=0.9, bg="blue")
 plot(ahagg_ppp.Gest)
 plot(ahagg_ppp.Fest)
@@ -399,8 +441,8 @@ plot(ahagg_ppp.Fest)
 #Kest=envelope(aNYppp,Kest,nsim=10) #alto custo computacional
 
 par(mfrow=c(2,2))
-#ahmurder_ppp.Gest=envelope(ahmurder_ppp,fun = Gest,nsim=20)
-#ahmurder_ppp.Fest=envelope(ahmurder_ppp,fun = Fest, nsim=10)
+ahmurder_ppp.Gest=envelope(ahmurder_ppp,fun = Gest,nsim=20)
+ahmurder_ppp.Fest=envelope(ahmurder_ppp,fun = Fest, nsim=10)
 plot(ahmurder_ppp, pch=21, cex=0.9, bg="blue")
 plot(ahmurder_ppp.Gest)
 plot(ahmurder_ppp.Fest)
@@ -413,8 +455,8 @@ plot(ahmurder_ppp.Fest)
 
 
 par(mfrow=c(2,2))
-#ahrobbery_ppp.Gest=envelope(ahrobbery_ppp,fun = Gest,nsim=20)
-#ahrobbery_ppp.Fest=envelope(ahrobbery_ppp,fun = Fest, nsim=10)
+ahrobbery_ppp.Gest=envelope(ahrobbery_ppp,fun = Gest,nsim=20)
+ahrobbery_ppp.Fest=envelope(ahrobbery_ppp,fun = Fest, nsim=10)
 plot(ahrobbery_ppp, pch=21, cex=0.9, bg="blue")
 plot(ahrobbery_ppp.Gest)
 plot(ahrobbery_ppp.Fest)
@@ -426,8 +468,8 @@ plot(ahrobbery_ppp.Fest)
 #Funcoes para estimar os envelopes das funcoes F, G e K
 #Kest=envelope(aNYppp,Kest,nsim=10) #alto custo computacional
 par(mfrow=c(2,2))
-#hburglary_ppp.Gest=envelope(hburglary_ppp,fun = Gest,nsim=20)
-#hburglary_ppp.Fest=envelope(hburglary_ppp,fun = Fest, nsim=10)
+hburglary_ppp.Gest=envelope(hburglary_ppp,fun = Gest,nsim=20)
+hburglary_ppp.Fest=envelope(hburglary_ppp,fun = Fest, nsim=10)
 plot(hburglary_ppp, pch=21, cex=0.9, bg="blue")
 plot(hburglary_ppp.Gest)
 plot(hburglary_ppp.Fest)
@@ -439,8 +481,8 @@ plot(hburglary_ppp.Fest)
 #Kest=envelope(aNYppp,Kest,nsim=10) #alto custo computacional
 
 par(mfrow=c(2,2))
-#ahrape_ppp.Gest=envelope(ahrape_ppp,fun = Gest,nsim=20)
-#ahrape_ppp.Fest=envelope(ahrape_ppp,fun = Fest, nsim=10)
+ahrape_ppp.Gest=envelope(ahrape_ppp,fun = Gest,nsim=20)
+ahrape_ppp.Fest=envelope(ahrape_ppp,fun = Fest, nsim=10)
 plot(ahrape_ppp, pch=21, cex=0.9, bg="blue")
 plot(ahrape_ppp.Gest)
 plot(ahrape_ppp.Fest)
@@ -452,8 +494,8 @@ plot(ahrape_ppp.Fest)
 #Kest=envelope(aNYppp,Kest,nsim=10) #alto custo computacional
 
 par(mfrow=c(2,2))
-#ahauto_ppp.Gest=envelope(ahauto_ppp,fun = Gest,nsim=20)
-#ahauto_ppp.Fest=envelope(ahauto_ppp,fun = Fest, nsim=10)
+ahauto_ppp.Gest=envelope(ahauto_ppp,fun = Gest,nsim=20)
+ahauto_ppp.Fest=envelope(ahauto_ppp,fun = Fest, nsim=10)
 plot(ahauto_ppp, pch=21, cex=0.9, bg="blue")
 plot(ahauto_ppp.Gest)
 plot(ahauto_ppp.Fest)

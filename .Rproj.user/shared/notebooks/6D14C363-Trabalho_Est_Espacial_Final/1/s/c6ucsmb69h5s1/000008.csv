@@ -1,8 +1,0 @@
-"0","##ppp - criar um objeto com classe ppp representando o padrao de pontos"
-"0","#Argumentos:"
-"0","#x - longitude"
-"0","#y - latitude"
-"0","#window - um objeto owin. "
-"0","#Plotando as localizacoes dos delitos"
-"0","par(mar=c(0.5,0.5,1.5,0.5))"
-"0","plot(Houston_ppp, pch=21, cex=0.9, bg=""blue"", main=""Ocorrencias de crimes em Houston"")"

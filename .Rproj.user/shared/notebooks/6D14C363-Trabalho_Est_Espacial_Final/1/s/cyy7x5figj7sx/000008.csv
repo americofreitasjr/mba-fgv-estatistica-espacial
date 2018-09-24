@@ -1,4 +1,0 @@
-"0","#Definindo o shapefile como uma janela onde os pontos serao plotados "
-"0","HCL <- as.owin(houston)"
-"0","#Plotando o shapefile"
-"0","plot(HCL)"
